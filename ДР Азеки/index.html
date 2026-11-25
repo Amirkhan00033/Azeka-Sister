@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Туған күніңмен, Айзере! ✨</title>
+  <style>
+    :root {
+      --bg: #fdf8f5;
+      --card: #ffffff;
+      --text: #1f1a24;
+      --muted: #6c6275;
+      --accent: #ff5d8f;
+      --accent-soft: #ffe3ec;
+      --border: #efe6ea;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 20px 18px 80px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .lang-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    .lang-btn,
+    .music-btn {
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      padding: 7px 14px;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .lang-btn.active,
+    .music-btn.playing {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .intro-screen {
+      min-height: calc(100dvh - 110px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .intro-screen.hidden {
+      display: none;
+    }
+
+    .hero {
+      width: 100%;
+      background: linear-gradient(135deg, #fff0f5 0%, #fffaf2 100%);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      padding: 44px 24px;
+      text-align: center;
+      box-shadow: 0 12px 32px rgba(255, 93, 143, 0.08);
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      margin-bottom: 12px;
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 1.08rem;
+      max-width: 560px;
+      margin: 0 auto 28px;
+    }
+
+    .main-content {
+      display: none;
+      animation: fadeSlideIn 0.4s ease;
+    }
+
+    .main-content.visible {
+      display: block;
+    }
+
+    @keyframes fadeSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 999px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(255, 93, 143, 0.28);
+      transition: transform 0.15s ease;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      margin: 12px 0 18px;
+      text-align: center;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
+    }
+
+    .media-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 12px;
+      box-shadow: 0 8px 24px rgba(31, 26, 36, 0.05);
+    }
+
+    .media-frame {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #f3ecf0;
+      margin-bottom: 10px;
+    }
+
+    .media-frame img,
+    .media-frame video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .caption {
+      font-size: 0.95rem;
+      color: var(--text);
+      font-weight: 500;
+      padding: 0 4px 4px;
+    }
+
+    .letter-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 28px 24px;
+      margin-top: 28px;
+      box-shadow: 0 8px 24px rgba(31, 26, 36, 0.05);
+    }
+
+    .letter-box p {
+      font-size: 1.05rem;
+      color: var(--text);
+      margin-bottom: 14px;
+    }
+
+    .letter-box p:last-child {
+      margin-bottom: 0;
+    }
+
+    .secret-box {
+      margin-top: 32px;
+      text-align: center;
+      background: var(--card);
+      border: 1px dashed var(--accent);
+      border-radius: 24px;
+      padding: 24px;
+    }
+
+    .secret-content {
+      display: none;
+      margin-top: 18px;
+    }
+
+    .secret-content.open {
+      display: block;
+    }
+
+    .secret-frame {
+      max-width: 320px;
+      aspect-ratio: 3 / 4;
+      margin: 0 auto 12px;
+      border-radius: 18px;
+      overflow: hidden;
+      background: #ece8ee;
+    }
+
+    .secret-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .wish-box {
+      position: relative;
+      margin-top: 32px;
+      text-align: center;
+      background: linear-gradient(135deg, #fff5f8 0%, #f6f3ff 100%);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 32px 20px;
+    }
+
+    .cake-stage {
+      font-size: 3.4rem;
+      line-height: 1.2;
+      margin-bottom: 12px;
+      transition: transform 0.25s ease;
+    }
+
+    .cake-stage.celebrate {
+      transform: scale(1.12);
+    }
+
+    .yuhuu-banner {
+      display: none;
+      font-size: clamp(1.8rem, 6vw, 2.8rem);
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      color: var(--accent);
+      margin: 12px 0 6px;
+      animation: popIn 0.35s ease;
+    }
+
+    .yuhuu-banner.show {
+      display: block;
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.5); opacity: 0; }
+      75% { transform: scale(1.12); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .wish-result {
+      margin-top: 8px;
+      font-weight: 700;
+      color: var(--text);
+      min-height: 24px;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 16px 14px 64px;
+      }
+
+      .intro-screen {
+        min-height: calc(100dvh - 96px);
+      }
+
+      .hero {
+        padding: 30px 16px;
+        border-radius: 22px;
+      }
+
+      .letter-box,
+      .secret-box,
+      .wish-box {
+        padding: 20px 16px;
+        border-radius: 20px;
+      }
+
+      .cake-stage {
+        font-size: 2.8rem;
+      }
+
+      .btn-primary {
+        width: 100%;
+        max-width: 320px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <audio id="calm-audio" src="paulyudin-romantic-family-159248.mp3" loop preload="auto"></audio>
+  <audio id="party-audio" src="party.mp3" loop preload="auto"></audio>
+  <audio id="yuhuu-audio" src="kids-cheering-classroom.mp3" preload="auto"></audio>
+
+  <div class="container">
+    <div class="topbar">
+      <button class="music-btn" id="music-btn" onclick="toggleMusic()">🎵 Әуенді қосу</button>
+      <div class="lang-group">
+        <button class="lang-btn active" id="btn-kk" onclick="setLang('kk')">KZ</button>
+        <button class="lang-btn" id="btn-ru" onclick="setLang('ru')">RU</button>
+      </div>
+    </div>
+
+    <div class="intro-screen" id="intro-screen">
+      <header class="hero">
+        <h1 id="hero-title">Туған күніңмен, Айзере! ✨</h1>
+        <p id="hero-sub">Ал біз үшін — жай ғана сүйікті Азёка. Бүгін жылдың ең керемет күні!</p>
+        <button class="btn-primary" id="hero-btn" onclick="openGreeting()">Құттықтауды ашу</button>
+      </header>
+    </div>
+
+    <main class="main-content" id="main-content">
+      <h2 class="section-title" id="gallery-title">Азёканың үздік сәттері</h2>
+      <section class="grid" id="gallery">
+        <article class="media-card">
+          <div class="media-frame">
+            <img src="WhatsApp Image 2026-11-25 at 19.23.20.jpeg" alt="Айзере фото 1" />
+          </div>
+          <p class="caption" id="cap-1">Жүзі жылы, көңілі нәзік — біздің сүйкімді Азёка ✨</p>
+        </article>
+
+        <article class="media-card">
+          <div class="media-frame">
+            <img src="WhatsApp Image 2026-11-25 at 17.39.23.jpeg" alt="Айзере фото 2" />
+          </div>
+          <p class="caption" id="cap-2">Стиль мен харизма 10/10 💫</p>
+        </article>
+
+        <article class="media-card">
+          <div class="media-frame">
+            <video src="Video Project 13.mp4" autoplay muted loop playsinline controls></video>
+          </div>
+          <p class="caption" id="cap-3">Көңіл күй мен шынайы вайб 🌸</p>
+        </article>
+
+        <article class="media-card">
+          <div class="media-frame">
+            <video src="WhatsApp Video 2026-11-25 at 18.46.20.mp4" autoplay muted loop playsinline controls></video>
+          </div>
+          <p class="caption" id="cap-4">Дерзкий образ және соңындағы күлкі 😎</p>
+        </article>
+      </section>
+
+      <section class="letter-box" id="letter"></section>
+
+      <section class="secret-box">
+        <button class="btn-primary" id="secret-btn" onclick="toggleSecret()">Құпия архивті ашу 🕶️</button>
+        <div class="secret-content" id="secret-content">
+          <div class="secret-frame">
+            <img src="WhatsApp Image 2026-11-25 at 17.39.23 (2).jpeg" alt="Секретное фото Азёки" />
+          </div>
+          <p class="caption" id="secret-cap">Тек саған арналған ең угарный кадр! 😂</p>
+        </div>
+      </section>
+
+      <section class="wish-box">
+        <div class="cake-stage" id="cake-stage" aria-hidden="true">🕯️🎂🕯️</div>
+        <button class="btn-primary" id="wish-btn" onclick="blowCandlesAndWish()">Шамды үрлеп, тілек тілеу 🎂</button>
+        <div class="yuhuu-banner" id="yuhuu-banner">ЮХУУУУУ! 🎉</div>
+        <div class="wish-result" id="wish-result"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <script>
+    const texts = {
+      kk: {
+        musicPlay: "🎵 Әуенді қосу",
+        musicPause: "⏸ Әуенді тоқтату",
+        heroTitle: "Туған күніңмен, Айзере! ✨",
+        heroSub: "Ал біз үшін — жай ғана сүйікті Азёка. Бүгін жылдың ең керемет күні!",
+        heroBtn: "Құттықтауды ашу",
+        galleryTitle: "Азёканың үздік сәттері",
+        cap1: "Жүзі жылы, көңілі нәзік — біздің сүйкімді Азёка ✨",
+        cap2: "Стиль мен харизма 10/10 💫",
+        cap3: "Көңіл күй мен шынайы вайб 🌸",
+        cap4: "Дерзкий образ және соңындағы күлкі 😎",
+        letterParagraphs: [
+          "Айзере, туған күніңмен! Әрдайым дауыстап айта бермеймін, бірақ сенің қандай керемет, шынайы әрі жанға жақын болып өсіп келе жатқаныңды қатты мақтан тұтамын.",
+          "Шынымды айтсам, сені қатты жақсы көремін. Кейде қасыңда отырып, маған сенімен қандай жайлы әрі тыныш екенін сеземін: ешнәрсені жасырмай, жасанды болмай, өзіңше болуға болады. Сен тіпті ең қарапайым күннің өзіне жылу сыйлай аласың, мен үшін бұл өте қымбат.",
+          "Қандай іске кіріссең де, бәрі оңай әрі сәтті болсын — оқуыңда да, ең батыл армандарыңда да жолың болсын. Қасыңда тек адал, сені шын бағалайтын жандар жүрсін, әр күнің қуаныш пен күлкіге толы болсын, мұңаятын себеп мүлде болмасын.",
+          "Қанша өссең де, өмір сені қайда жетелесе де, бір нәрсені есіңде сақта: не болса да, ағаң әрқашан қасыңда, әрдайым түсінеді және саған қорған. Мен әрқашан сенің жағыңдамын. Туған күніңмен, сүйікті Азёка!"
+        ],
+        secretBtn: "Құпия архивті ашу 🕶️",
+        secretCap: "Тек саған арналған ең угарный кадр! 😂",
+        wishBtn: "Шамды үрлеп, тілек тілеу 🎂",
+        yuhuuText: "ЮХУУУУУ! 🎉",
+        wishMsg: "Шамдар сөнді, тілегің қабылданды! Орындалу мерзімі — осы жыл ✨"
+      },
+      ru: {
+        musicPlay: "🎵 Включить музыку",
+        musicPause: "⏸ Выключить музыку",
+        heroTitle: "С днём рождения, Айзере! ✨",
+        heroSub: "А для своих — просто любимая Азёка. Официально самый крутой день в году!",
+        heroBtn: "Открыть поздравление",
+        galleryTitle: "Лучшие кадры Азёки",
+        cap1: "Нежная и своя в доску — наша любимая Азёка ✨",
+        cap2: "Стиль и харизма 10/10 💫",
+        cap3: "Настроение и живой вайб 🌸",
+        cap4: "Дерзкий образ и улыбка в конце 😎",
+        letterParagraphs: [
+          "Айзере, с твоим днём! Я не всегда говорю это вслух, но я очень горжусь тем, какой классной, живой и настоящей ты растёшь.",
+          "Честно — я безумно тебя люблю. Иногда рядом с тобой ловишь себя на мысли, что мне с тобой по-настоящему спокойно и комфортно: не нужно ничего притворяться или подбирать слова, с тобой просто легко и хорошо. Ты умеешь подарить тепло даже в самый обычный день, и для меня это очень много значит.",
+          "Желаю, чтобы у тебя легко получалось всё, за что бы ты ни взялась — от учёбы до самых смелых мечт. Пусть рядом будут только верные, искренние люди, которые ценят тебя по-настоящему, каждый день приносит крутые эмоции, а поводов для грусти и переживаний не будет вообще.",
+          "Какой бы взрослой ты ни становилась и куда бы тебя ни вела жизнь, помни одно: что бы ни произошло, старший брат всегда рядом, всегда поймёт и за тебя горой. Я всегда на твоей стороне. С днём рождения, моя любимая Азёка!"
+        ],
+        secretBtn: "Открыть секретный архив 🕶️",
+        secretCap: "Тот самый угарный кадр специально для тебя! 😂",
+        wishBtn: "Задуть свечи и загадать желание 🎂",
+        yuhuuText: "ЮХУУУУУ! 🎉",
+        wishMsg: "Свечи задуты, желание принято! Срок исполнения — этот год ✨"
+      }
+    };
+
+    let currentLang = "kk";
+    let preferPartyTrack = false;
+    let isPlaying = false;
+    let resumeTimer = null;
+
+    const calmAudio = document.getElementById("calm-audio");
+    const partyAudio = document.getElementById("party-audio");
+    const yuhuuAudio = document.getElementById("yuhuu-audio");
+
+    calmAudio.volume = 0.45;
+    partyAudio.volume = 0.55;
+    yuhuuAudio.volume = 1.0;
+
+    function updateMusicButton() {
+      const btn = document.getElementById("music-btn");
+      btn.classList.toggle("playing", isPlaying);
+      btn.textContent = isPlaying ? texts[currentLang].musicPause : texts[currentLang].musicPlay;
+    }
+
+    function playBackgroundMusic() {
+      const primary = preferPartyTrack ? partyAudio : calmAudio;
+      const fallback = calmAudio;
+
+      calmAudio.pause();
+      partyAudio.pause();
+
+      primary.play().then(() => {
+        isPlaying = true;
+        updateMusicButton();
+      }).catch(() => {
+        fallback.play().then(() => {
+          isPlaying = true;
+          updateMusicButton();
+        }).catch(() => {
+          isPlaying = false;
+          updateMusicButton();
+        });
+      });
+    }
+
+    function stopAllMusic() {
+      if (resumeTimer) {
+        clearTimeout(resumeTimer);
+        resumeTimer = null;
+      }
+      yuhuuAudio.pause();
+      calmAudio.pause();
+      partyAudio.pause();
+      isPlaying = false;
+      updateMusicButton();
+    }
+
+    function toggleMusic() {
+      if (isPlaying) {
+        stopAllMusic();
+      } else {
+        playBackgroundMusic();
+      }
+    }
+
+    function renderLetter(paragraphs) {
+      const box = document.getElementById("letter");
+      box.innerHTML = "";
+      paragraphs.forEach((text) => {
+        const p = document.createElement("p");
+        p.textContent = text;
+        box.appendChild(p);
+      });
+    }
+
+    function setLang(lang) {
+      currentLang = lang;
+      document.getElementById("btn-kk").classList.toggle("active", lang === "kk");
+      document.getElementById("btn-ru").classList.toggle("active", lang === "ru");
+
+      const t = texts[lang];
+      document.getElementById("hero-title").textContent = t.heroTitle;
+      document.getElementById("hero-sub").textContent = t.heroSub;
+      document.getElementById("hero-btn").textContent = t.heroBtn;
+      document.getElementById("gallery-title").textContent = t.galleryTitle;
+      document.getElementById("cap-1").textContent = t.cap1;
+      document.getElementById("cap-2").textContent = t.cap2;
+      document.getElementById("cap-3").textContent = t.cap3;
+      document.getElementById("cap-4").textContent = t.cap4;
+      renderLetter(t.letterParagraphs);
+      document.getElementById("secret-btn").textContent = t.secretBtn;
+      document.getElementById("secret-cap").textContent = t.secretCap;
+      document.getElementById("wish-btn").textContent = t.wishBtn;
+      if (document.getElementById("yuhuu-banner").classList.contains("show")) {
+        document.getElementById("yuhuu-banner").textContent = t.yuhuuText;
+      }
+      if (document.getElementById("wish-result").textContent) {
+        document.getElementById("wish-result").textContent = t.wishMsg;
+      }
+      updateMusicButton();
+    }
+
+    function burstConfetti(big = false) {
+      if (typeof confetti === "function") {
+        confetti({
+          particleCount: big ? 170 : 90,
+          spread: big ? 110 : 75,
+          origin: { y: 0.6 }
+        });
+      }
+    }
+
+    function openGreeting() {
+      document.getElementById("intro-screen").classList.add("hidden");
+      document.getElementById("main-content").classList.add("visible");
+      burstConfetti(false);
+      playBackgroundMusic();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function toggleSecret() {
+      document.getElementById("secret-content").classList.toggle("open");
+    }
+
+    yuhuuAudio.addEventListener("ended", () => {
+      if (resumeTimer) {
+        clearTimeout(resumeTimer);
+        resumeTimer = null;
+      }
+      playBackgroundMusic();
+    });
+
+    function blowCandlesAndWish() {
+      const cake = document.getElementById("cake-stage");
+      cake.textContent = "💨🎂💨";
+      cake.classList.add("celebrate");
+
+      preferPartyTrack = true;
+
+      calmAudio.pause();
+      partyAudio.pause();
+      if (resumeTimer) {
+        clearTimeout(resumeTimer);
+        resumeTimer = null;
+      }
+
+      burstConfetti(true);
+      const banner = document.getElementById("yuhuu-banner");
+      banner.textContent = texts[currentLang].yuhuuText;
+      banner.classList.add("show");
+      document.getElementById("wish-result").textContent = texts[currentLang].wishMsg;
+
+      yuhuuAudio.currentTime = 0;
+      yuhuuAudio.play().then(() => {
+        const durationSec = Number.isFinite(yuhuuAudio.duration) && yuhuuAudio.duration > 0
+          ? yuhuuAudio.duration
+          : 2.5;
+        resumeTimer = setTimeout(() => {
+          playBackgroundMusic();
+        }, durationSec * 1000 + 150);
+      }).catch(() => {
+        playBackgroundMusic();
+      });
+    }
+
+    setLang("kk");
+  </script>
+</body>
+</html>
