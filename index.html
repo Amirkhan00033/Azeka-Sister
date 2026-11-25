@@ -32,7 +32,7 @@
     .container {
       max-width: 860px;
       margin: 0 auto;
-      padding: 24px 18px 80px;
+      padding: 20px 18px 80px;
     }
 
     .topbar {
@@ -41,7 +41,7 @@
       align-items: center;
       flex-wrap: wrap;
       gap: 10px;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
 
     .lang-group {
@@ -69,26 +69,57 @@
       border-color: var(--accent);
     }
 
+    .intro-screen {
+      min-height: calc(100dvh - 110px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .intro-screen.hidden {
+      display: none;
+    }
+
     .hero {
+      width: 100%;
       background: linear-gradient(135deg, #fff0f5 0%, #fffaf2 100%);
       border: 1px solid var(--border);
       border-radius: 28px;
-      padding: 36px 24px;
+      padding: 44px 24px;
       text-align: center;
       box-shadow: 0 12px 32px rgba(255, 93, 143, 0.08);
-      margin-bottom: 32px;
     }
 
     .hero h1 {
       font-size: clamp(2rem, 5vw, 3.2rem);
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
 
     .hero p {
       color: var(--muted);
       font-size: 1.08rem;
       max-width: 560px;
-      margin: 0 auto 24px;
+      margin: 0 auto 28px;
+    }
+
+    .main-content {
+      display: none;
+      animation: fadeSlideIn 0.4s ease;
+    }
+
+    .main-content.visible {
+      display: block;
+    }
+
+    @keyframes fadeSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .btn-primary {
@@ -110,7 +141,7 @@
 
     .section-title {
       font-size: 1.5rem;
-      margin: 36px 0 16px;
+      margin: 12px 0 18px;
       text-align: center;
     }
 
@@ -252,6 +283,37 @@
       color: var(--text);
       min-height: 24px;
     }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 16px 14px 64px;
+      }
+
+      .intro-screen {
+        min-height: calc(100dvh - 96px);
+      }
+
+      .hero {
+        padding: 30px 16px;
+        border-radius: 22px;
+      }
+
+      .letter-box,
+      .secret-box,
+      .wish-box {
+        padding: 20px 16px;
+        border-radius: 20px;
+      }
+
+      .cake-stage {
+        font-size: 2.8rem;
+      }
+
+      .btn-primary {
+        width: 100%;
+        max-width: 320px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -268,61 +330,65 @@
       </div>
     </div>
 
-    <header class="hero">
-      <h1 id="hero-title">Туған күніңмен, Айзере! ✨</h1>
-      <p id="hero-sub">Ал біз үшін — жай ғана сүйікті Азёка. Бүгін жылдың ең керемет күні!</p>
-      <button class="btn-primary" id="hero-btn" onclick="openGreeting()">Құттықтауды ашу</button>
-    </header>
+    <div class="intro-screen" id="intro-screen">
+      <header class="hero">
+        <h1 id="hero-title">Туған күніңмен, Айзере! ✨</h1>
+        <p id="hero-sub">Ал біз үшін — жай ғана сүйікті Азёка. Бүгін жылдың ең керемет күні!</p>
+        <button class="btn-primary" id="hero-btn" onclick="openGreeting()">Құттықтауды ашу</button>
+      </header>
+    </div>
 
-    <h2 class="section-title" id="gallery-title">Азёканың үздік сәттері</h2>
-    <section class="grid" id="gallery">
-      <article class="media-card">
-        <div class="media-frame">
-          <img src="WhatsApp Image 2026-11-25 at 19.23.20.jpeg" alt="Айзере фото 1" />
+    <main class="main-content" id="main-content">
+      <h2 class="section-title" id="gallery-title">Азёканың үздік сәттері</h2>
+      <section class="grid" id="gallery">
+        <article class="media-card">
+          <div class="media-frame">
+            <img src="WhatsApp Image 2026-11-25 at 19.23.20.jpeg" alt="Айзере фото 1" />
+          </div>
+          <p class="caption" id="cap-1">Жүзі жылы, көңілі нәзік — біздің сүйкімді Азёка ✨</p>
+        </article>
+
+        <article class="media-card">
+          <div class="media-frame">
+            <img src="WhatsApp Image 2026-11-25 at 17.39.23.jpeg" alt="Айзере фото 2" />
+          </div>
+          <p class="caption" id="cap-2">Стиль мен харизма 10/10 💫</p>
+        </article>
+
+        <article class="media-card">
+          <div class="media-frame">
+            <video src="Video Project 13.mp4" autoplay muted loop playsinline controls></video>
+          </div>
+          <p class="caption" id="cap-3">Көңіл күй мен шынайы вайб 🌸</p>
+        </article>
+
+        <article class="media-card">
+          <div class="media-frame">
+            <video src="WhatsApp Video 2026-11-25 at 18.46.20.mp4" autoplay muted loop playsinline controls></video>
+          </div>
+          <p class="caption" id="cap-4">Дерзкий образ және соңындағы күлкі 😎</p>
+        </article>
+      </section>
+
+      <section class="letter-box" id="letter"></section>
+
+      <section class="secret-box">
+        <button class="btn-primary" id="secret-btn" onclick="toggleSecret()">Құпия архивті ашу 🕶️</button>
+        <div class="secret-content" id="secret-content">
+          <div class="secret-frame">
+            <img src="WhatsApp Image 2026-11-25 at 17.39.23 (2).jpeg" alt="Секретное фото Азёки" />
+          </div>
+          <p class="caption" id="secret-cap">Тек саған арналған ең угарный кадр! 😂</p>
         </div>
-        <p class="caption" id="cap-1">Жүзі жылы, көңілі нәзік — біздің сүйкімді Азёка ✨</p>
-      </article>
+      </section>
 
-      <article class="media-card">
-        <div class="media-frame">
-          <img src="WhatsApp Image 2026-11-25 at 17.39.23.jpeg" alt="Айзере фото 2" />
-        </div>
-        <p class="caption" id="cap-2">Стиль мен харизма 10/10 💫</p>
-      </article>
-
-      <article class="media-card">
-        <div class="media-frame">
-          <video src="Video Project 13.mp4" autoplay muted loop playsinline controls></video>
-        </div>
-        <p class="caption" id="cap-3">Көңіл күй мен шынайы вайб 🌸</p>
-      </article>
-
-      <article class="media-card">
-        <div class="media-frame">
-          <video src="WhatsApp Video 2026-11-25 at 18.46.20.mp4" autoplay muted loop playsinline controls></video>
-        </div>
-        <p class="caption" id="cap-4">Дерзкий образ және соңындағы күлкі 😎</p>
-      </article>
-    </section>
-
-    <section class="letter-box" id="letter"></section>
-
-    <section class="secret-box">
-      <button class="btn-primary" id="secret-btn" onclick="toggleSecret()">Құпия архивті ашу 🕶️</button>
-      <div class="secret-content" id="secret-content">
-        <div class="secret-frame">
-          <img src="WhatsApp Image 2026-11-25 at 17.39.23 (2).jpeg" alt="Секретное фото Азёки" />
-        </div>
-        <p class="caption" id="secret-cap">Тек саған арналған ең угарный кадр! 😂</p>
-      </div>
-    </section>
-
-    <section class="wish-box">
-      <div class="cake-stage" id="cake-stage" aria-hidden="true">🕯️🎂🕯️</div>
-      <button class="btn-primary" id="wish-btn" onclick="blowCandlesAndWish()">Шамды үрлеп, тілек тілеу 🎂</button>
-      <div class="yuhuu-banner" id="yuhuu-banner">ЮХУУУУУ! 🎉</div>
-      <div class="wish-result" id="wish-result"></div>
-    </section>
+      <section class="wish-box">
+        <div class="cake-stage" id="cake-stage" aria-hidden="true">🕯️🎂🕯️</div>
+        <button class="btn-primary" id="wish-btn" onclick="blowCandlesAndWish()">Шамды үрлеп, тілек тілеу 🎂</button>
+        <div class="yuhuu-banner" id="yuhuu-banner">ЮХУУУУУ! 🎉</div>
+        <div class="wish-result" id="wish-result"></div>
+      </section>
+    </main>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
@@ -396,7 +462,6 @@
     }
 
     function playBackgroundMusic() {
-      // Если party.mp3 доступен — включаем его, иначе продолжаем красивую мелодию paulyudin-romantic-family-159248.mp3
       const primary = preferPartyTrack ? partyAudio : calmAudio;
       const fallback = calmAudio;
 
@@ -485,16 +550,17 @@
     }
 
     function openGreeting() {
+      document.getElementById("intro-screen").classList.add("hidden");
+      document.getElementById("main-content").classList.add("visible");
       burstConfetti(false);
       playBackgroundMusic();
-      document.getElementById("gallery").scrollIntoView({ behavior: "smooth" });
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     function toggleSecret() {
       document.getElementById("secret-content").classList.toggle("open");
     }
 
-    // Когда крик детей заканчивается — автоматически запускаем мелодию дальше
     yuhuuAudio.addEventListener("ended", () => {
       if (resumeTimer) {
         clearTimeout(resumeTimer);
@@ -510,7 +576,6 @@
 
       preferPartyTrack = true;
 
-      // Сначала глушим фон, чтобы дети прокричали чисто
       calmAudio.pause();
       partyAudio.pause();
       if (resumeTimer) {
@@ -524,7 +589,6 @@
       banner.classList.add("show");
       document.getElementById("wish-result").textContent = texts[currentLang].wishMsg;
 
-      // Запускаем крик детей и через его окончание (или по резервному таймеру) включаем мелодию дальше
       yuhuuAudio.currentTime = 0;
       yuhuuAudio.play().then(() => {
         const durationSec = Number.isFinite(yuhuuAudio.duration) && yuhuuAudio.duration > 0
